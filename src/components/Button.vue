@@ -1,7 +1,7 @@
 <template>
   <button class="button" @click="click" :disabled="isDisabled">
       <span class="icon">
-          <i :class="`fas fas-${icon}`"></i>
+          <i :class="`fas fa-${icon}`"></i>
       </span>
     <span>{{ description }}</span>
   </button>
