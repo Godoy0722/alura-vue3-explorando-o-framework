@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 class="title">Projetos</h1>
     <router-link to="/projetos/novo" class="button">
       <span class="icon is-small">
         <i class="fas fa-plus"></i>
@@ -10,24 +9,29 @@
 
     <table class="table is-fullwidth">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Ações</th>
-        </tr>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="projeto in projetos" :key="projeto.id">
-          <td>{{ projeto.id }}</td>
-          <td>{{ projeto.nome }}</td>
-          <td>
-            <router-link :to="`/projetos/${projeto.id}`" class="button">
+      <tr v-for="projeto in projetos" :key="projeto.id">
+        <td>{{ projeto.id }}</td>
+        <td>{{ projeto.nome }}</td>
+        <td>
+          <router-link :to="`/projetos/atualizar/${projeto.id}`" class="button">
               <span class="icon is-small">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-            </router-link>
-          </td>
-        </tr>
+          </router-link>
+          <button class="button ml-2 is-danger" @click="excluir(projeto.id)">
+            <span class="icon is-small">
+            <i class="fas fa-trash"></i>
+            </span>
+          </button>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -36,13 +40,21 @@
 <script lang="ts">
 import {computed, defineComponent} from "vue";
 import {useStore} from "@/store";
+import {DELETA_PROJETO} from "@/store/mutation-types";
 
 export default defineComponent({
+  methods: {
+    excluir(id: string) {
+      this.store.commit(DELETA_PROJETO, id);
+    },
+  },
+
   setup() {
     const store = useStore();
 
     return {
-      projetos: computed(() => store.state.projetos)
+      projetos: computed(() => store.state.projetos),
+      store,
     }
   }
 });

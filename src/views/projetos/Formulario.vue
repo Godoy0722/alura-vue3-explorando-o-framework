@@ -1,5 +1,5 @@
 <template>
-  <section class="projetos">
+  <section>
     <form @submit.prevent="salvar">
       <div class="field">
         <label for="nomeDoProjeto" class="label">Nome do Projeto</label>
@@ -16,19 +16,44 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useStore} from "@/store";
+import {ADICIONA_PROJETO, ALTERA_PROJETO} from "@/store/mutation-types";
 
 export default defineComponent({
   name: 'Formulario',
+  props: {
+    id: { type: String },
+  },
 
   data: () => ({
     nomeDoProjeto: '',
   }),
 
+  mounted() {
+    if (this.id) {
+      const projeto = this.findProjeto(this.id);
+
+      this.nomeDoProjeto = projeto?.nome || '';
+    }
+  },
+
   methods: {
     salvar() {
-      this.store.commit('ADICIONA_PROJETO', this.nomeDoProjeto)
-      this.nomeDoProjeto = '';
+      if(this.id) {
+        const projeto = this.findProjeto(this.id);
+        if (projeto) {
+          projeto.nome = this.nomeDoProjeto;
+          this.store.commit(ALTERA_PROJETO, projeto);
+        }
+      } else {
+        this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto)
+        this.nomeDoProjeto = '';
+      }
       this.$router.push('/projetos')
+
+    },
+
+    findProjeto(id: string) {
+      return this.store.state.projetos.find(proj => proj.id === id);
     }
   },
   setup() {
@@ -40,9 +65,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped>
-.projetos {
-  padding: 1.25rem;
-}
-</style>
