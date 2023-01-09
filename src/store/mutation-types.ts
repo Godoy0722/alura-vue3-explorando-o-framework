@@ -1,3 +1,5 @@
 export const ADICIONA_PROJETO = 'ADICIONA_PROJETO';
 export const ALTERA_PROJETO = 'ALTERA_PROJETO';
 export const DELETA_PROJETO = 'DELETA_PROJETO';
+
+export const NOTIFICAR = 'NOTIFICAR';
