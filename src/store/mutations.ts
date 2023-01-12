@@ -1,10 +1,13 @@
 import {MutationTree} from 'vuex';
 import {Estado} from "@/store/index";
-import {ADICIONA_PROJETO, ALTERA_PROJETO, DELETA_PROJETO, NOTIFICAR} from "@/store/mutation-types";
+import {ADICIONA_PROJETO, ALTERA_PROJETO, DEFINIR_PROJETOS, DELETA_PROJETO, NOTIFICAR} from "@/store/mutation-types";
 import IProjeto from "@/interfaces/IProjeto";
 import INotificacao from "@/interfaces/INotificacao";
 
 export const mutations: MutationTree<Estado> = {
+    [DEFINIR_PROJETOS]: (state, projetos: IProjeto[]) => {
+      state.projetos = [...projetos];
+    },
     [ADICIONA_PROJETO]: (state, nomeDoProjeto: string) => {
         const projeto = {
             id: new Date().toISOString(),

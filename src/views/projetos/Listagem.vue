@@ -40,17 +40,18 @@
 <script lang="ts">
 import {computed, defineComponent} from "vue";
 import {useStore} from "@/store";
-import {DELETA_PROJETO} from "@/store/mutation-types";
+import {DELETAR_PROJETO, OBTER_PROJETOS} from "@/store/action-types";
 
 export default defineComponent({
   methods: {
     excluir(id: string) {
-      this.store.commit(DELETA_PROJETO, id);
+      this.store.dispatch(DELETAR_PROJETO, id);
     },
   },
 
   setup() {
     const store = useStore();
+    store.dispatch(OBTER_PROJETOS);
 
     return {
       projetos: computed(() => store.state.projetos),

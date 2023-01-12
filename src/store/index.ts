@@ -1,8 +1,11 @@
-import IProjeto from "@/interfaces/IProjeto";
 import {createStore, Store, useStore as vuexUseStore} from "vuex";
 import {InjectionKey} from "vue";
+
+import {mutations} from "./mutations";
+import {actions} from "./actions";
+
+import IProjeto from "@/interfaces/IProjeto";
 import INotificacao from "@/interfaces/INotificacao";
-import {mutations} from "@/store/mutations";
 
 export interface Estado {
     projetos: IProjeto[];
@@ -17,6 +20,7 @@ export const store = createStore<Estado>({
         notificacoes: [] as INotificacao[],
     },
     mutations,
+    actions,
 });
 
 export function useStore(): Store<Estado> {

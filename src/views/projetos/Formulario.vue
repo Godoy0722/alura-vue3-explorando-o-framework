@@ -16,9 +16,9 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useStore} from "@/store";
-import {ADICIONA_PROJETO, ALTERA_PROJETO} from "@/store/mutation-types";
 import {TipoNotificacao} from "@/interfaces/INotificacao";
 import useNotificador from '@/hooks/notificador';
+import {ATUALIZA_PROJETO, CADASTRAR_PROJETOS} from "@/store/action-types";
 
 export default defineComponent({
   name: 'Formulario',
@@ -44,10 +44,10 @@ export default defineComponent({
         const projeto = this.findProjeto(this.id);
         if (projeto) {
           projeto.nome = this.nomeDoProjeto;
-          this.store.commit(ALTERA_PROJETO, projeto);
+          this.store.dispatch(ATUALIZA_PROJETO, projeto);
         }
       } else {
-        this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto)
+        this.store.dispatch(CADASTRAR_PROJETOS, this.nomeDoProjeto)
       }
       this.nomeDoProjeto = '';
       this.notificar(TipoNotificacao.SUCESSO, 'Excelente!', 'O projeto foi cadastrado com sucesso');
