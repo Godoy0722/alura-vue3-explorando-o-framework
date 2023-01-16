@@ -1,26 +1,34 @@
 import {createStore, Store, useStore as vuexUseStore} from "vuex";
 import {InjectionKey} from "vue";
-
-import {mutations} from "./mutations";
-import {actions} from "./actions";
-
-import IProjeto from "@/interfaces/IProjeto";
-import INotificacao from "@/interfaces/INotificacao";
+import {EstadoProjeto, moduloProjeto} from "@/store/modules/projeto";
+import {EstadoTarefa, moduloTarefa} from "@/store/modules/tarefa";
+import {EstadoNotificacao, moduloNotificacao} from "@/store/modules/notificacao";
 
 export interface Estado {
-    projetos: IProjeto[];
-    notificacoes: INotificacao[];
+    moduloNotificacoes: EstadoNotificacao;
+    moduloProjeto: EstadoProjeto;
+    moduloTarefa: EstadoTarefa;
 }
 
 export const key: InjectionKey<Store<Estado>> = Symbol();
 
 export const store = createStore<Estado>({
     state: {
-        projetos: [] as IProjeto[],
-        notificacoes: [] as INotificacao[],
+        moduloNotificacoes: {
+          notificacoes: [],
+        },
+        moduloProjeto: {
+            projetos: [],
+        },
+        moduloTarefa: {
+            tarefas: [],
+        }
     },
-    mutations,
-    actions,
+    modules: {
+        moduloNotificacao,
+        moduloProjeto,
+        moduloTarefa,
+    }
 });
 
 export function useStore(): Store<Estado> {

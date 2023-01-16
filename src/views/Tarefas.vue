@@ -1,11 +1,31 @@
 <template>
   <Formulario @aoSalvarTarefa="salvarTarefa"/>
   <div class="lista">
-    <Tarefa v-for="(n, index) in tarefas" :key="index" :tarefa="n"/>
+    <Tarefa v-for="(n, index) in tarefas" :key="index" :tarefa="n" @aoTarefaClicada="selecionarTarefa" />
 
     <Box v-if="tarefas.length === 0">
       Você não está muito produtivo hoje :(
     </Box>
+
+    <div class="modal" :class="{'is-active': tarefaSelecionada}" v-if="tarefaSelecionada">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Editando uma Tarefa</p>
+          <button class="delete" aria-label="close" @click="fecharModal()"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label for="descricaoDaTarefa" class="label">Descrição</label>
+            <input type="text" class="input" v-model="tarefaSelecionada.descricao" id="descricaoDaTarefa">
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="alterarTarefa()">Salvar Alterações</button>
+          <button class="button" @click="fecharModal()">Cancelar</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,8 +34,9 @@ import {computed, defineComponent} from "vue";
 import Box from "@/components/Box.vue";
 import Tarefa from "@/components/Tarefa.vue";
 import Formulario from "@/components/Formulario.vue";
-import ITarefa from "@/interfaces/ITarefa";
 import {useStore} from "@/store";
+import {ATUALIZA_TAREFA, CADASTRAR_TAREFAS, OBTER_PROJETOS, OBTER_TAREFAS} from "@/store/action-types";
+import ITarefa from "@/interfaces/ITarefa";
 import {NOTIFICAR} from "@/store/mutation-types";
 import INotificacao, {TipoNotificacao} from "@/interfaces/INotificacao";
 
@@ -23,7 +44,7 @@ export default defineComponent({
   components: {Box, Tarefa, Formulario},
 
   data: () => ({
-    tarefas: [] as ITarefa[],
+    tarefaSelecionada: null as ITarefa | null,
   }),
 
   methods: {
@@ -37,17 +58,32 @@ export default defineComponent({
 
         return;
       }
-
-      this.tarefas.push(tarefa);
+      this.store.dispatch(CADASTRAR_TAREFAS, tarefa);
     },
+
+    selecionarTarefa(tarefa: ITarefa): void {
+      this.tarefaSelecionada = tarefa;
+    },
+
+    fecharModal(): void {
+      this.tarefaSelecionada = null;
+    },
+
+    alterarTarefa(): void {
+      this.store.dispatch(ATUALIZA_TAREFA, this.tarefaSelecionada);
+    }
   },
 
   setup() {
     const store = useStore();
+    Promise.all([
+      store.dispatch(OBTER_TAREFAS),
+      store.dispatch(OBTER_PROJETOS),
+    ]);
 
     return {
       store,
-      notificacoes: computed(() => store.state.notificacoes),
+      tarefas: computed(() => store.state.moduloTarefa.tarefas),
     }
   }
 });

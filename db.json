@@ -12,5 +12,25 @@
       "nome": "teste",
       "id": 3
     }
+  ],
+  "tarefas": [
+    {
+      "id": 1,
+      "duracaoEmSegundos": 120,
+      "descricao": "Configuração do ambiente",
+      "projeto": {
+        "id": 1,
+        "nome": "Alura Tracker"
+      }
+    },
+    {
+      "descricao": "Teste Tarefa",
+      "duracaoEmSegundos": 2,
+      "projeto": {
+        "id": 1,
+        "nome": "Alura Tracker"
+      },
+      "id": 2
+    }
   ]
 }

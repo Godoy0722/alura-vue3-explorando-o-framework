@@ -55,7 +55,7 @@ export default defineComponent({
     },
 
     findProjeto(id: string) {
-      return this.store.state.projetos.find(proj => proj.id === id);
+      return this.store.state.moduloProjeto.projetos.find(proj => proj.id === id);
     }
   },
   setup() {
