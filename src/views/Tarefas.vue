@@ -7,34 +7,31 @@
 
     <div class="field">
       <p class="control has-icons-left">
-        <input type="text" class="input" placeholder="Digite para filtrar" v-model="filtro" />
+        <input type="text" class="input" placeholder="Digite para filtrar" v-model="filtro"/>
         <span class="icon is-small is-left">
           <i class="fas fa-envelope"></i>
         </span>
       </p>
     </div>
 
-    <Tarefa v-for="(n, index) in tarefas" :key="index" :tarefa="n" @aoTarefaClicada="selecionarTarefa" />
+    <Tarefa v-for="(n, index) in tarefas" :key="index" :tarefa="n" @aoTarefaClicada="selecionarTarefa"/>
 
-    <div class="modal" :class="{'is-active': tarefaSelecionada}" v-if="tarefaSelecionada">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Editando uma Tarefa</p>
-          <button class="delete" aria-label="close" @click="fecharModal()"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label for="descricaoDaTarefa" class="label">Descrição</label>
-            <input type="text" class="input" v-model="tarefaSelecionada.descricao" id="descricaoDaTarefa">
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" @click="alterarTarefa()">Salvar Alterações</button>
-          <button class="button" @click="fecharModal()">Cancelar</button>
-        </footer>
-      </div>
-    </div>
+    <Modal :mostrar="!!tarefaSelecionada">
+      <template v-slot:cabecalho>
+        <p class="modal-card-title">Editando uma Tarefa</p>
+        <button class="delete" aria-label="close" @click="fecharModal()"></button>
+      </template>
+      <template v-slot:corpo>
+        <div class="field">
+          <label for="descricaoDaTarefa" class="label">Descrição</label>
+          <input type="text" class="input" v-model="tarefaSelecionada.descricao" id="descricaoDaTarefa">
+        </div>
+      </template>
+      <template v-slot:rodape>
+        <button class="button is-success" @click="alterarTarefa()">Salvar Alterações</button>
+        <button class="button" @click="fecharModal()">Cancelar</button>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -49,9 +46,10 @@ import INotificacao, {TipoNotificacao} from "@/interfaces/INotificacao";
 import {OBTER_PROJETOS} from "@/store/modules/projeto/action-types";
 import {ATUALIZA_TAREFA, CADASTRAR_TAREFAS, OBTER_TAREFAS} from "@/store/modules/tarefa/action-types";
 import {NOTIFICAR} from "@/store/modules/notificacao/mutation-types";
+import Modal from "@/components/Modal.vue";
 
 export default defineComponent({
-  components: {Box, Tarefa, Formulario},
+  components: {Modal, Box, Tarefa, Formulario},
 
   setup() {
     const store = useStore();
@@ -64,7 +62,7 @@ export default defineComponent({
     ]);
 
     const salvarTarefa = (tarefa: ITarefa): void => {
-      if(!tarefa.projeto) {
+      if (!tarefa.projeto) {
         store.commit(NOTIFICAR, {
           titulo: 'Ops',
           text: 'Selecione um projeto antes de definir uma tarefa',
