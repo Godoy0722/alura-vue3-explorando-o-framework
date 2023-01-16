@@ -9,9 +9,11 @@ import {ATUALIZA_TAREFA, CADASTRAR_TAREFAS, OBTER_TAREFAS} from "./action-types"
 const PREV_URL = 'tarefas';
 
 export const moduloTarefaActions: ActionTree<EstadoTarefa, Estado> = {
-    [OBTER_TAREFAS]: async ({ commit }) => {
+    [OBTER_TAREFAS]: async ({ commit }, filtro: string) => {
         try {
-            const { data } = await httpClient.get<ITarefa[]>(PREV_URL);
+            const url = (typeof filtro === 'undefined' || filtro.length === 0) ? PREV_URL : `${PREV_URL}?descricao=${filtro}`;
+
+            const { data } = await httpClient.get<ITarefa[]>(url);
             commit(DEFINIR_TAREFAS, data);
         } catch (error) {
             console.log(error);
