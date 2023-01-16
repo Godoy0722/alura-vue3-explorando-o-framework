@@ -1,6 +1,6 @@
 import INotificacao, {TipoNotificacao} from "@/interfaces/INotificacao";
 import {store} from "@/store";
-import {NOTIFICAR} from "@/store/mutation-types";
+import {NOTIFICAR} from "@/store/modules/notificacao/mutation-types";
 
 type Notificador = {
     notificar: (tipo: TipoNotificacao, titulo: string, texto: string) => void,

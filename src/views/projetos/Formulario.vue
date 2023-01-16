@@ -18,7 +18,7 @@ import {defineComponent} from "vue";
 import {useStore} from "@/store";
 import {TipoNotificacao} from "@/interfaces/INotificacao";
 import useNotificador from '@/hooks/notificador';
-import {ATUALIZA_PROJETO, CADASTRAR_PROJETOS} from "@/store/action-types";
+import {ATUALIZA_PROJETO, CADASTRAR_PROJETOS} from "@/store/modules/projeto/action-types";
 
 export default defineComponent({
   name: 'Formulario',

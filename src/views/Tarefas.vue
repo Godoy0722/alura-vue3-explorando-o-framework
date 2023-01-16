@@ -35,10 +35,11 @@ import Box from "@/components/Box.vue";
 import Tarefa from "@/components/Tarefa.vue";
 import Formulario from "@/components/Formulario.vue";
 import {useStore} from "@/store";
-import {ATUALIZA_TAREFA, CADASTRAR_TAREFAS, OBTER_PROJETOS, OBTER_TAREFAS} from "@/store/action-types";
 import ITarefa from "@/interfaces/ITarefa";
-import {NOTIFICAR} from "@/store/mutation-types";
 import INotificacao, {TipoNotificacao} from "@/interfaces/INotificacao";
+import {OBTER_PROJETOS} from "@/store/modules/projeto/action-types";
+import {ATUALIZA_TAREFA, CADASTRAR_TAREFAS, OBTER_TAREFAS} from "@/store/modules/tarefa/action-types";
+import {NOTIFICAR} from "@/store/modules/notificacao/mutation-types";
 
 export default defineComponent({
   components: {Box, Tarefa, Formulario},

@@ -40,7 +40,7 @@
 <script lang="ts">
 import {computed, defineComponent} from "vue";
 import {useStore} from "@/store";
-import {DELETAR_PROJETO, OBTER_PROJETOS} from "@/store/action-types";
+import {DELETAR_PROJETO, OBTER_PROJETOS} from "@/store/modules/projeto/action-types";
 
 export default defineComponent({
   methods: {

@@ -1,6 +1,6 @@
 import INotificacao, {TipoNotificacao} from "@/interfaces/INotificacao";
-import {NOTIFICAR} from "@/store/mutation-types";
 import {store} from "@/store";
+import {NOTIFICAR} from "@/store/modules/notificacao/mutation-types";
 
 export const notificarMixin = {
     methods: {

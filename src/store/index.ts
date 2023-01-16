@@ -13,7 +13,7 @@ export interface Estado {
 export const key: InjectionKey<Store<Estado>> = Symbol();
 
 export const store = createStore<Estado>({
-    state: {
+    state: () => ({
         moduloNotificacoes: {
           notificacoes: [],
         },
@@ -23,7 +23,7 @@ export const store = createStore<Estado>({
         moduloTarefa: {
             tarefas: [],
         }
-    },
+    }),
     modules: {
         moduloNotificacao,
         moduloProjeto,
