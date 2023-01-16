@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from "vue";
+import {computed, defineComponent, ref} from "vue";
 import Box from "@/components/Box.vue";
 import Tarefa from "@/components/Tarefa.vue";
 import Formulario from "@/components/Formulario.vue";
@@ -44,14 +44,18 @@ import {NOTIFICAR} from "@/store/modules/notificacao/mutation-types";
 export default defineComponent({
   components: {Box, Tarefa, Formulario},
 
-  data: () => ({
-    tarefaSelecionada: null as ITarefa | null,
-  }),
+  setup() {
+    const store = useStore();
+    const tarefaSelecionada = ref<ITarefa | null>(null);
 
-  methods: {
-    salvarTarefa(tarefa: ITarefa) {
+    Promise.all([
+      store.dispatch(OBTER_TAREFAS),
+      store.dispatch(OBTER_PROJETOS),
+    ]);
+
+    const salvarTarefa = (tarefa: ITarefa): void => {
       if(!tarefa.projeto) {
-        this.store.commit(NOTIFICAR, {
+        store.commit(NOTIFICAR, {
           titulo: 'Ops',
           text: 'Selecione um projeto antes de definir uma tarefa',
           tipo: TipoNotificacao.FALHA
@@ -59,32 +63,28 @@ export default defineComponent({
 
         return;
       }
-      this.store.dispatch(CADASTRAR_TAREFAS, tarefa);
-    },
+      store.dispatch(CADASTRAR_TAREFAS, tarefa);
+    };
 
-    selecionarTarefa(tarefa: ITarefa): void {
-      this.tarefaSelecionada = tarefa;
-    },
+    const selecionarTarefa = (tarefa: ITarefa): void => {
+      tarefaSelecionada.value = tarefa;
+    };
 
-    fecharModal(): void {
-      this.tarefaSelecionada = null;
-    },
+    const fecharModal = (): void => {
+      tarefaSelecionada.value = null;
+    };
 
-    alterarTarefa(): void {
-      this.store.dispatch(ATUALIZA_TAREFA, this.tarefaSelecionada);
+    const alterarTarefa = (): void => {
+      store.dispatch(ATUALIZA_TAREFA, tarefaSelecionada);
     }
-  },
-
-  setup() {
-    const store = useStore();
-    Promise.all([
-      store.dispatch(OBTER_TAREFAS),
-      store.dispatch(OBTER_PROJETOS),
-    ]);
 
     return {
-      store,
       tarefas: computed(() => store.state.moduloTarefa.tarefas),
+      tarefaSelecionada,
+      salvarTarefa,
+      selecionarTarefa,
+      fecharModal,
+      alterarTarefa,
     }
   }
 });

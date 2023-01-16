@@ -11,6 +11,10 @@
     {
       "nome": "teste",
       "id": 3
+    },
+    {
+      "nome": "Novo teste Composition API",
+      "id": 4
     }
   ],
   "tarefas": [

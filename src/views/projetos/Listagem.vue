@@ -43,19 +43,18 @@ import {useStore} from "@/store";
 import {DELETAR_PROJETO, OBTER_PROJETOS} from "@/store/modules/projeto/action-types";
 
 export default defineComponent({
-  methods: {
-    excluir(id: string) {
-      this.store.dispatch(DELETAR_PROJETO, id);
-    },
-  },
 
   setup() {
     const store = useStore();
     store.dispatch(OBTER_PROJETOS);
 
+    const excluir = (id: string) => {
+      store.dispatch(DELETAR_PROJETO, id);
+    }
+
     return {
       projetos: computed(() => store.state.moduloProjeto.projetos),
-      store,
+      excluir,
     }
   }
 });

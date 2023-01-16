@@ -8,13 +8,13 @@ import {
     ALTERA_PROJETO,
     DEFINIR_PROJETOS,
     DELETA_PROJETO
-} from "@/store/modules/projeto/mutation-types";
+} from "./mutation-types";
 import {
     ATUALIZA_PROJETO,
     CADASTRAR_PROJETOS,
     DELETAR_PROJETO,
     OBTER_PROJETOS
-} from "@/store/modules/projeto/action-types";
+} from "./action-types";
 
 const PREV_URL = 'projetos';
 

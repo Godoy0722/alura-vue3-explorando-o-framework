@@ -30,30 +30,26 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
+import {computed, defineComponent, ref} from 'vue';
 
 export default defineComponent({
   name: 'BarraLateral',
   emits: ['aoTemaAlterado'],
 
-  data: () => ({
-    modoEscuroAtivo: false,
-  }),
+  setup(props, { emit }) {
+    const modoEscuroAtivo = ref(false);
 
-  computed: {
-    textoBotao() {
-      if (this.modoEscuroAtivo) {
-        return 'Desativar modo escuro';
-      }
+    const alterarTema = (): void => {
+      modoEscuroAtivo.value = !modoEscuroAtivo.value;
+      emit('aoTemaAlterado', modoEscuroAtivo);
+    };
 
-      return 'Ativar modo escuro';
-    }
-  },
+    const textoBotao = computed(() => modoEscuroAtivo.value ? 'Desativar modo escuro' : 'Ativar modo escuro');
 
-  methods: {
-    alterarTema(): void {
-      this.modoEscuroAtivo = !this.modoEscuroAtivo;
-      this.$emit('aoTemaAlterado', this.modoEscuroAtivo);
+    return {
+      modoEscuroAtivo,
+      alterarTema,
+      textoBotao,
     }
   }
 });

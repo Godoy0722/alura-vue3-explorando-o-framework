@@ -19,17 +19,16 @@ import {TipoNotificacao} from "@/interfaces/INotificacao";
 export default defineComponent({
   name: 'Notificacoes',
 
-  data: () => ({
-    classNotificacao: {
-      [TipoNotificacao.SUCESSO]: 'success',
-      [TipoNotificacao.ATENCAO]: 'warning',
-      [TipoNotificacao.FALHA]: 'danger'
-    }
-  }),
-
   setup() {
     const store = useStore();
+    const classNotificacao = {
+      [TipoNotificacao.SUCESSO]: 'success',
+          [TipoNotificacao.ATENCAO]: 'warning',
+          [TipoNotificacao.FALHA]: 'danger'
+    }
+
     return {
+      classNotificacao,
       notificacoes: computed(() => store.state.moduloNotificacoes.notificacoes),
     }
   }

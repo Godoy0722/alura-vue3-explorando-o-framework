@@ -30,10 +30,12 @@ export default defineComponent({
     }
   },
 
-  methods: {
-    click() {
-      this.$emit('clicked');
+  setup(props, { emit }) {
+    const click = (): void => {
+      emit('clicked');
     }
+
+    return { click };
   }
 });
 </script>

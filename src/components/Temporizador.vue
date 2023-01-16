@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, ref} from "vue";
 
 import Cronometro from "@/components/Cronometro.vue";
 import Button from "@/components/Button.vue";
@@ -21,27 +21,32 @@ export default defineComponent({
 
   components: { Cronometro, Button },
 
-  data: () => ({
-    tempoEmSegundos: 0,
-    cronometro: 0,
-    cronometroRodando: false,
-  }),
+  setup(props, { emit }) {
+    const tempoEmSegundos = ref(0);
+    const cronometro = ref(0);
+    const cronometroRodando = ref(false);
 
-  methods: {
-    iniciar() {
-      this.cronometro = setInterval(() => {
-        this.tempoEmSegundos += 1;
+    const iniciar = (): void => {
+      cronometro.value = setInterval(() => {
+        tempoEmSegundos.value += 1;
       }, 1000);
 
-      this.cronometroRodando = true;
-    },
+      cronometroRodando.value = true;
+    };
 
-    finalizar() {
-      clearInterval(this.cronometro);
-      this.cronometroRodando = false;
-      this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos);
-      this.tempoEmSegundos = 0;
-    },
+    const finalizar = (): void => {
+      clearInterval(cronometro.value);
+      cronometroRodando.value = false;
+      emit('aoTemporizadorFinalizado', tempoEmSegundos.value);
+      tempoEmSegundos.value = 0;
+    };
+
+    return {
+      tempoEmSegundos,
+      cronometroRodando,
+      iniciar,
+      finalizar,
+    }
   }
 });
 </script>

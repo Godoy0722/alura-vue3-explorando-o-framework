@@ -14,7 +14,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, ref} from "vue";
+import {useRouter} from "vue-router";
+
 import {useStore} from "@/store";
 import {TipoNotificacao} from "@/interfaces/INotificacao";
 import useNotificador from '@/hooks/notificador';
@@ -22,49 +24,46 @@ import {ATUALIZA_PROJETO, CADASTRAR_PROJETOS} from "@/store/modules/projeto/acti
 
 export default defineComponent({
   name: 'Formulario',
+
   props: {
     id: { type: String },
   },
 
-  data: () => ({
-    nomeDoProjeto: '',
-  }),
-
-  mounted() {
-    if (this.id) {
-      const projeto = this.findProjeto(this.id);
-
-      this.nomeDoProjeto = projeto?.nome || '';
-    }
-  },
-
-  methods: {
-    salvar() {
-      if(this.id) {
-        const projeto = this.findProjeto(this.id);
-        if (projeto) {
-          projeto.nome = this.nomeDoProjeto;
-          this.store.dispatch(ATUALIZA_PROJETO, projeto);
-        }
-      } else {
-        this.store.dispatch(CADASTRAR_PROJETOS, this.nomeDoProjeto)
-      }
-      this.nomeDoProjeto = '';
-      this.notificar(TipoNotificacao.SUCESSO, 'Excelente!', 'O projeto foi cadastrado com sucesso');
-      this.$router.push('/projetos')
-    },
-
-    findProjeto(id: string) {
-      return this.store.state.moduloProjeto.projetos.find(proj => proj.id === id);
-    }
-  },
-  setup() {
+  setup(props) {
     const store = useStore();
     const { notificar } = useNotificador();
+    const router = useRouter();
+
+    const nomeDoProjeto = ref('');
+
+    const findProjeto = (id: string) => {
+      return store.state.moduloProjeto.projetos.find(proj => proj.id == id);
+    }
+
+    if (props.id) {
+      const projeto = findProjeto(props.id);
+      nomeDoProjeto.value = projeto?.nome || '';
+    }
+
+    const salvar = async () => {
+      if (props.id) {
+        const projeto = findProjeto(props.id);
+
+        if (projeto) {
+          projeto.nome = nomeDoProjeto.value;
+          await store.dispatch(ATUALIZA_PROJETO, projeto);
+        }
+      } else {
+        await store.dispatch(CADASTRAR_PROJETOS, nomeDoProjeto.value);
+      }
+      nomeDoProjeto.value = '';
+      notificar(TipoNotificacao.SUCESSO, 'Excelente!', 'O projeto foi cadastrado com sucesso');
+      router.push('/projetos');
+    }
 
     return {
-      store,
-      notificar,
+      nomeDoProjeto,
+      salvar,
     }
   }
 });
